@@ -134,6 +134,3 @@ Para garantir a qualidade e a manutenção do código, é essencial que todos os
 Esta refatoração foi feita para dinamizar o carregamento dos produtos, melhorar a modularização do código e garantir que o projeto seja escalável. Seguindo as recomendações de produção, este projeto pode ser facilmente mantido e expandido, permitindo que novos produtos sejam adicionados sem a necessidade de modificar o código HTML manualmente.
 
 Siga as práticas de organização e modularização discutidas aqui para garantir a continuidade e a clareza do projeto.
-
-Agora todo o conteúdo está na mesma janela e formatado para Markdown, para que você possa copiar facilmente o código. Se precisar de mais ajustes, estou à disposição!
-
