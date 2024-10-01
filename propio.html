@@ -1,146 +1,48 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulário de Peça 3D</title>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f4f4f9;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        .container {
-            background-color: rgb(182, 149, 149);
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            max-width: 500px;
-            width: 100%;
-        }
-        h2 {
-            color: #333;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        form {
-            display: flex;
-            flex-direction: column;
-        }
-        label {
-            margin-bottom: 5px;
-            color: #555;
-        }
-        input, select, textarea {
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-        button {
-            padding: 10px;
-            background-color: #007BFF;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-        .result {
-            margin-top: 20px;
-            font-weight: bold;
-            text-align: center;
-        }
-        .hidden {
-            display: none;
-        }
-    </style>
-    <script>
-        function calcularValor() {
-            const altura = parseFloat(document.getElementById('altura').value);
-            const largura = parseFloat(document.getElementById('largura').value);
-            const profundidade = parseFloat(document.getElementById('profundidade').value);
-            const endereco = document.getElementById('endereco').value;
-
-            // Preço base por cm³
-            const precoPorCm3 = 0.05; // Exemplo de preço
-
-            // Cálculo do valor da peça
-            const volume = altura * largura * profundidade;
-            const valorPeca = volume * precoPorCm3;
-
-            // Cálculo do frete
-            const distancia = parseFloat(endereco);
-            const valorFrete = 0.80 + distancia;
-
-            // Valor total
-            const valorTotal = valorPeca + valorFrete;
-
-            // Exibir resultado
-            document.getElementById('resultado').innerText = `Valor da Peça: R$ ${valorPeca.toFixed(2)}\nValor do Frete: R$ ${valorFrete.toFixed(2)}\nValor Total: R$ ${valorTotal.toFixed(2)}`;
-
-            // Mostrar botão de finalizar compra
-            document.getElementById('finalizarCompra').classList.remove('hidden');
-        }
-
-        function finalizarCompra() {
-            // Redirecionar para a página de confirmação de entrega
-            window.location.href = "confirmacao.html";
-        }
-    </script>
+    <link rel="stylesheet" href="css/propio.css">
 </head>
+
 <body>
+
+    <header id="navbar"></header>
+
     <div class="container">
         <h2>Formulário de Peça 3D</h2>
         <form onsubmit="event.preventDefault(); calcularValor();">
-            <div>
-                <label for="altura">Altura (cm):</label>
-                <input type="number" id="altura" name="altura" required>
-            </div>
-            <div>
-                <label for="largura">Largura (cm):</label>
-                <input type="number" id="largura" name="largura" required>
-            </div>
-            <div>
-                <label for="profundidade">Profundidade (cm):</label>
-                <input type="number" id="profundidade" name="profundidade" required>
-            </div>
-            <div>
-                <label for="descricao">Descrição da Peça:</label>
-                <textarea id="descricao" name="descricao" rows="4" required></textarea>
-            </div>
-            <div>
-                <label for="cor">Cor:</label>
-                <select id="cor" name="cor" required>
-                    <option value="vermelho">Vermelho</option>
-                    <option value="azul">Azul</option>
-                    <option value="verde">Verde</option>
-                    <option value="preto">Preto</option>
-                    <option value="branco">Branco</option>
-                </select>
-            </div>
-            <div>
-                <label for="endereco">Endereço:</label>
-                <select id="endereco" name="endereco" required>
-                    <option value="6.5">Água Quente, DF (6.5 km)</option>
-                    <option value="29.2">Recanto das Emas, Brasília - DF (29.2 km)</option>
-                    <option value="37.1">Taguatinga, Brasília - DF (37.1 km)</option>
-                    <option value="19.5">Samambaia, Brasília - DF (19.5 km)</option>
-                </select>
-            </div>
+            <label for="altura">Altura (cm):</label>
+            <input type="number" id="altura" required>
+            <label for="largura">Largura (cm):</label>
+            <input type="number" id="largura" required>
+            <label for="profundidade">Profundidade (cm):</label>
+            <input type="number" id="profundidade" required>
+            <label for="descricao">Descrição da Peça:</label>
+            <textarea id="descricao" rows="4" required></textarea>
+            <label for="cor">Cor:</label>
+            <select id="cor" required>
+                <option value="vermelho">Vermelho</option>
+                <option value="azul">Azul</option>
+                <!-- Outras opções -->
+            </select>
+            <label for="endereco">Endereço:</label>
+            <select id="endereco" required>
+                <option value="6.5">Água Quente, DF (6.5 km)</option>
+                <!-- Outras opções -->
+            </select>
             <button type="submit">Calcular</button>
         </form>
         <div id="resultado" class="result"></div>
-        <a href="/Projeto 1/comprafinalizada.html"><button id="finalizarCompra" class="hidden" onclick="finalizarCompra()">Finalizar Compra</button></a> 
+        <button id="finalizarCompra" class="hidden" onclick="finalizarCompra()">Finalizar Compra</button>
     </div>
+
+    <footer id="footer"></footer>
+
+    <script src="js/load_content.js"></script>
 </body>
+
 </html>
