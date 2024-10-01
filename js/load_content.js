@@ -1,63 +1,98 @@
 // Função para carregar componentes HTML de forma assíncrona
-function carregarComponente(url, idDoContainer, nCards = 1) {
-    // Faz uma solicitação HTTP para a URL fornecida
+function carregarComponente(url, idDoContainer) {
     fetch(url)
-        // Quando a resposta da solicitação estiver disponível, executa a função abaixo
-        .then(function (resposta) {
-            // Converte a resposta para texto (o conteúdo HTML do arquivo)
-            return resposta.text();
+        .then(resposta => resposta.text())
+        .then(dados => {
+            document.getElementById(idDoContainer).innerHTML += dados;
         })
-        // Quando o texto do conteúdo estiver disponível, executa a função abaixo
-        .then(function (dados) {
-            // Verifica se o container é o do cards
-            if (idDoContainer === 'cards') {
-                let conteudo = ''; // Variável para armazenar o conteúdo completo a ser inserido
-                let rowContent = ''; // Variável para armazenar o conteúdo de uma linha (row)
-                const cardsPerRow = 4; // Quantidade máxima de cards por linha (row)
-
-                // Loop que se repete o número de vezes definido no nCards
-                for (let i = 0; i < nCards; i++) {
-                    rowContent += dados; // Adiciona o conteúdo do card à linha atual
-
-                    // Verifica se atingiu o limite de cards por linha ou se é o último card
-                    if ((i + 1) % cardsPerRow === 0 || i + 1 === nCards) {
-                        // Adiciona a linha completa ao conteúdo, envolvida em ua div com classe 'row'
-                        conteudo += `<div class="row mb-4">${rowContent}</div>`;
-                        rowContent = ''; // Reseta a variável para iniciar uma nova linha
-                    }
-                }
-
-                // Insere todo o conteúdo (com múltiplas linhas, se necessário) no container 'cards'
-                document.getElementById(idDoContainer).innerHTML += conteudo;
-            } else {
-                // Para outros componentes, insere o conteúdo diretamente no container
-                document.getElementById(idDoContainer).innerHTML += dados;
-            }
-        })
-
-        // Caso ocorra algum erro na solicitação, captura e exibe o erro no console
-        .catch(function (erro) {
-            console.error('Erro ao carregar o componente: ', erro);
-        });
+        .catch(erro => console.error('Erro ao carregar o componente: ', erro));
 }
 
-// Definimos a variável nCards para controlar quantos blocos de cards serão carregados
-let nCards = 7; // Por exemplo, carregará 7 cards, o que criará 2 rows (uma com 4 cards e outra com 3)
+// Função para carregar dinamicamente os produtos da pasta 'produtos'
+async function carregarProdutos() {
+    const produtosContainer = document.getElementById('cards');
+    const cardsPerRow = 4;
+    let rowContent = '';
+    let conteudo = '';
 
-// Detecta qual é a página atual através do caminho do arquivo (pathname)
+    try {
+        // Simulação de uma lista de produtos. Esta função pode ser modificada para usar uma API ou leitura de diretórios.
+        const produtos = await listarProdutos();
+
+        produtos.forEach((produto, index) => {
+            const { nome, imagem, pasta } = produto;
+
+            const cardHtml = `
+                <div class="col-lg">
+                    <div class="card text-center mb-5 shadow-sm">
+                        <a href="product.html?pasta=${pasta}">
+                            <img src="${imagem}" alt="${nome}" class="card-img-top">
+                        </a>
+                        <div class="card-body">
+                            <h5 class="card-title">${nome}</h5>
+                            <p class="card-text">Descrição do produto ${nome}</p>
+                            <a href="product.html?pasta=${pasta}" class="btn btn-outline-secondary">Comprar</a>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            rowContent += cardHtml;
+
+            // Cria uma nova linha (row) a cada 4 cards ou quando for o último card
+            if ((index + 1) % cardsPerRow === 0 || index + 1 === produtos.length) {
+                conteudo += `<div class="row mb-4">${rowContent}</div>`;
+                rowContent = ''; // Reseta o conteúdo da linha para a próxima
+            }
+        });
+
+        produtosContainer.innerHTML = conteudo;
+
+    } catch (erro) {
+        console.error('Erro ao carregar os produtos: ', erro);
+    }
+}
+
+// Simulação de função para listar produtos (esta função pode ser modificada para usar uma API ou leitura de diretórios)
+async function listarProdutos() {
+    // Aqui você teria uma função que verifica as subpastas dentro de 'produtos'
+    // e lista as imagens e o nome dos produtos. Apenas a primeira imagem encontrada na pasta será usada.
+    return [
+        {
+            nome: 'Produto 1',
+            imagem: 'produtos/01_produto/foto1.jpg', // Caminho da imagem do produto
+            pasta: '01_produto'
+        },
+        {
+            nome: 'Produto 2',
+            imagem: 'produtos/02_produto/foto1.jpg',
+            pasta: '02_produto'
+        },
+        {
+            nome: 'Produto 3',
+            imagem: 'produtos/03_produto/foto1.jpg',
+            pasta: '03_produto'
+        }
+        // Continue listando os produtos aqui
+    ];
+}
+
+// Detecta a página atual através do caminho do arquivo (pathname)
 const paginaAtual = window.location.pathname.split('/').pop();
 
 // Carrega os componentes que são comuns a todas as páginas (navbar e footer)
-carregarComponente('components/navbar.html', 'navbar'); // carrega a navbar sem repetição
-carregarComponente('components/footer.html', 'footer'); // carrega o footer sem repetição
+carregarComponente('components/navbar.html', 'navbar');
+carregarComponente('components/footer.html', 'footer');
 
-// Se a página atual for 'index.html', carrega os componentes específicos dessa página
+// Se a página atual for 'index.html', carrega os produtos dinamicamente
 if (paginaAtual === 'index.html') {
-    carregarComponente('components/carousel.html', 'carousel'); // carrega o carousel sem repetição
-    carregarComponente('components/card.html', 'cards', nCards); // carrega os cards com repetição e organização em linhas
+    carregarComponente('components/carousel.html', 'carousel');
+    carregarProdutos(); // Carrega os produtos dinamicamente
 }
 
-// Se a página for 'product.html', carrega os componentes específico dessa página
+// Se a página for 'product.html', carrega os detalhes do produto
 if (paginaAtual === 'product.html') {
-    carregarComponente('components/product_details.html', 'productDetails');
+    const params = new URLSearchParams(window.location.search);
+    const pastaProduto = params.get('pasta');
+    carregarComponente(`produtos/${pastaProduto}/detalhes.html`, 'productDetails');
 }

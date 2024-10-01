@@ -1,7 +1,86 @@
-# Projeto E-commerce - Correções e Modelo de Produção
+# Projeto E-commerce - Refatoração e Diretrizes
 
 ## Introdução
-Este repositório contém as correções feitas no projeto original desenvolvido pelos alunos. O objetivo é organizar o código e padronizar o modelo de produção, utilizando a metodologia de programação orientada a componentes, com uma clara divisão de responsabilidades entre HTML, CSS e JavaScript.
+
+Este repositório contém as atualizações e refatorações feitas no projeto original para dinamizar o carregamento dos produtos e melhorar a organização geral do código. Agora, os produtos são carregados automaticamente a partir de subpastas localizadas na pasta `produtos`, e os cards são gerados dinamicamente na página inicial. Além disso, cada card leva o usuário para a página do produto correspondente.
+
+## Estrutura do Projeto
+
+### Pasta `produtos`
+- A pasta `produtos` contém subpastas para cada produto. O nome de cada subpasta segue o formato `01_produto`, `02_produto`, etc.
+- Cada subpasta pode conter uma ou mais fotos do produto. Apenas a **primeira foto** (normalmente chamada `foto1.jpg`) será carregada dinamicamente no card do produto.
+
+#### Exemplo de Estrutura:
+/produtos ├── 01_produto │ ├── foto1.jpg ├── 02_produto │ ├── foto1.jpg ├── 03_produto │ ├── foto1.jpg
+
+
+### Página `index.html`
+Na página inicial (`index.html`), os produtos são carregados dinamicamente. O JavaScript verifica as subpastas dentro de `produtos` e gera um card para cada produto. O card inclui a imagem do produto, o nome e um botão de "Comprar". A cada 4 produtos, uma nova linha (row) é criada para garantir a responsividade do layout.
+
+### Página de Produto (`product.html`)
+Quando o usuário clica em um card, ele é redirecionado para a página `product.html` com o conteúdo do produto específico. A URL contém um parâmetro (`pasta=nome_da_pasta`), e o JavaScript usa esse parâmetro para carregar o conteúdo da pasta correspondente.
+
+## Funcionalidades Implementadas
+
+### Carregamento Dinâmico de Produtos
+
+Os produtos são carregados dinamicamente a partir das subpastas dentro de `produtos`. A função `carregarProdutos()` verifica todas as subpastas, busca a primeira imagem disponível (`foto1.jpg`) e gera um card para cada produto. Essa função garante que, se novos produtos forem adicionados, os cards sejam automaticamente gerados sem a necessidade de editar o HTML.
+
+#### Código Responsável:
+```javascript
+async function carregarProdutos() {
+    const produtosContainer = document.getElementById('cards');
+    const cardsPerRow = 4;
+    let rowContent = '';
+    let conteudo = '';
+
+    try {
+        const produtos = await listarProdutos();
+
+        produtos.forEach((produto, index) => {
+            const { nome, imagem, pasta } = produto;
+            const cardHtml = `
+                <div class="col-lg">
+                    <div class="card text-center mb-5 shadow-sm">
+                        <a href="product.html?pasta=${pasta}">
+                            <img src="${imagem}" alt="${nome}" class="card-img-top">
+                        </a>
+                        <div class="card-body">
+                            <h5 class="card-title">${nome}</h5>
+                            <p class="card-text">Descrição do produto ${nome}</p>
+                            <a href="product.html?pasta=${pasta}" class="btn btn-outline-secondary">Comprar</a>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            rowContent += cardHtml;
+
+            if ((index + 1) % cardsPerRow === 0 || index + 1 === produtos.length) {
+                conteudo += `<div class="row mb-4">${rowContent}</div>`;
+                rowContent = '';
+            }
+        });
+
+        produtosContainer.innerHTML = conteudo;
+
+    } catch (erro) {
+        console.error('Erro ao carregar os produtos: ', erro);
+    }
+}
+```
+
+## Página de Detalhes do Produto
+Quando o usuário clica em um card, ele é redirecionado para a página product.html, onde o conteúdo da pasta correspondente é carregado automaticamente. O JavaScript usa o parâmetro da URL para identificar qual pasta deve ser carregada.
+
+#### Código Responsável:
+```javascript
+if (paginaAtual === 'product.html') {
+    const params = new URLSearchParams(window.location.search);
+    const pastaProduto = params.get('pasta');
+    carregarComponente(`produtos/${pastaProduto}/detalhes.html`, 'productDetails');
+}
+```
 
 ## Correções Realizadas
 
@@ -44,11 +123,17 @@ Para garantir a qualidade e a manutenção do código, é essencial que todos os
    - **JavaScript:** Toda lógica de interação deve estar em arquivos JS na pasta `js/`. O `load_content.js` será responsável pelo carregamento dinâmico dos componentes.
 
 ### 3. **Commits e Versionamento**
-   - **Mensagens de commit:** As mensagens devem ser claras e descritivas. Exemplo: `Corrige layout da navbar`, `Adiciona funcionalidade de cálculo no formulário de peças 3D`.
-   - **Branches individuais:** Cada aluno deve trabalhar em uma branch separada para a sua tarefa e abrir um Pull Request para revisão antes de realizar o merge na branch principal.
+   - **Mensagens de commit:** As mensagens de commit devem ser claras e descritivas, como: `Adiciona novos cards para produtos`, `Adiciona funcionalidade de cálculo no formulário de peças 3D`, `Corrige erro no carregamento dinâmico de imagens`.
+   - **Branches individuais:** Use branches individuais para cada feature ou correção, e abra Pull Requests para revisão antes de realizar o merge.
 
 ### 4. **Revisão de Código**
-   - **Pull Requests:** Todo novo código deve ser submetido via Pull Request e revisado antes de ser integrado à branch principal. Isso garante a qualidade e facilita a colaboração em equipe.
+   - Todo código novo deve passar por Pull Requests e ser revisado antes de ser integrado à branch principal.
+   - Garanta que o código siga as boas práticas de organização e modularização.
 
 ## Conclusão
-Este repositório foi criado para servir de exemplo das melhores práticas que devem ser seguidas no desenvolvimento do projeto. Mantenha-se organizado, modularize o código e siga as diretrizes acima para garantir que o projeto continue evoluindo de maneira estruturada e fácil de manter.
+Esta refatoração foi feita para dinamizar o carregamento dos produtos, melhorar a modularização do código e garantir que o projeto seja escalável. Seguindo as recomendações de produção, este projeto pode ser facilmente mantido e expandido, permitindo que novos produtos sejam adicionados sem a necessidade de modificar o código HTML manualmente.
+
+Siga as práticas de organização e modularização discutidas aqui para garantir a continuidade e a clareza do projeto.
+
+Agora todo o conteúdo está na mesma janela e formatado para Markdown, para que você possa copiar facilmente o código. Se precisar de mais ajustes, estou à disposição!
+
