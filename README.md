@@ -106,6 +106,7 @@ if (paginaAtual === 'product.html') {
      - `css/` → Arquivos de estilo
      - `js/` → Arquivos de scripts JavaScript
      - `components/` → Componentes HTML reutilizáveis (ex.: `navbar.html`, `footer.html`, etc.)
+     - `produtos/` → Aqui vão ser colocadas as subpastas de cada produto seguindo o exemplo `01_produto`, `02_produto`, etc.
      - `imgs/` → Imagens usadas no projeto
      - `index.html`, `product.html`, `comprafinalizada.html`, `propio.html` → Páginas principais
 
