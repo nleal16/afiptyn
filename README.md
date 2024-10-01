@@ -18,7 +18,7 @@ Arquivos afetados: Todas as páginas HTML agora utilizam componentes dinâmicos 
 Problema: O JavaScript estava fragmentado e com responsabilidades misturadas.
 Correção: O arquivo load_content.js foi refatorado para lidar com o carregamento de componentes de forma mais modular, incluindo a organização correta dos cards na página inicial. O código foi simplificado e estruturado para que a adição de novos componentes seja mais fácil.
 4. Melhoria na Estrutura de Pastas
-Correção: A estrutura de pastas foi revisada e mantida conforme o seguinte padrão:
+**Correção:** A estrutura de pastas foi revisada e mantida conforme o seguinte padrão:
 css/ → Arquivos de estilo
 js/ → Arquivos de scripts JavaScript
 components/ → Componentes HTML reutilizáveis (ex.: navbar.html, footer.html, etc.)
@@ -28,16 +28,16 @@ index.html, product.html, comprafinalizada.html, propio.html → Páginas princi
 Para garantir a qualidade e a manutenção do código, é essencial que todos os envolvidos no projeto sigam um modelo de produção orientado a componentes e modularização. Seguem as diretrizes:
 
 1. Programação Orientada a Componentes
-Componentes reutilizáveis: Todos os elementos comuns, como navbar, footer e outros componentes, devem ser centralizados em arquivos HTML na pasta components/ e carregados dinamicamente nas páginas usando JavaScript. Isso evita duplicação e facilita a manutenção.
+**Componentes reutilizáveis:** Todos os elementos comuns, como navbar, footer e outros componentes, devem ser centralizados em arquivos HTML na pasta components/ e carregados dinamicamente nas páginas usando JavaScript. Isso evita duplicação e facilita a manutenção.
 HTML limpo: O HTML das páginas deve conter apenas o que for específico daquela página. Componentes gerais devem ser carregados via load_content.js.
-2. Separação de Responsabilidades
-HTML: Apenas a estrutura semântica da página.
-CSS: Estilos devem estar sempre em arquivos separados dentro da pasta css/, sem inline styles.
+**2. Separação de Responsabilidades**
+**HTML:** Apenas a estrutura semântica da página.
+**CSS:** Estilos devem estar sempre em arquivos separados dentro da pasta css/, sem inline styles.
 JavaScript: Toda lógica de interação deve estar em arquivos JS na pasta js/. O load_content.js será responsável pelo carregamento dinâmico dos componentes.
-3. Commits e Versionamento
+**3. Commits e Versionamento**
 Mensagens de commit: As mensagens devem ser claras e descritivas. Exemplo: Corrige layout da navbar, Adiciona funcionalidade de cálculo no formulário de peças 3D.
 Branches individuais: Cada aluno deve trabalhar em uma branch separada para a sua tarefa e abrir um Pull Request para revisão antes de realizar o merge na branch principal.
-4. Revisão de Código
+**4. Revisão de Código**
 Pull Requests: Todo novo código deve ser submetido via Pull Request e revisado antes de ser integrado à branch principal. Isso garante a qualidade e facilita a colaboração em equipe.
 
 ## Conclusão
